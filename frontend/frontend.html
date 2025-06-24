@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Compression Portal</title>
+  <style>
+    :root {
+      --pastel-bg: #f9f7f7;
+      --pastel-primary: #a8dadc;
+      --pastel-secondary: #ffe5d9;
+      --pastel-accent: #ffb4a2;
+      --pastel-text: #6b705c;
+      --pastel-border: #cdb4db;
+      --pastel-card: #ffffff;
+      --pastel-shadow: rgba(168, 218, 220, 0.2);
+      --error-color: #e07a5f;
+      --success-color: #81b29a;
+      --deflate-color: #6c63ff;
+      --lz77-color: #ff9a76;
+      --time-color: #9b5de5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8f4ff, #e6f7ff);
+      color: var(--pastel-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      max-width: 700px;
+    }
+
+    h1 {
+      color: #6c63ff;
+      margin-bottom: 0.8rem;
+      font-weight: 700;
+      font-size: 2.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #5a5a72;
+      margin-bottom: 1rem;
+    }
+
+    .container {
+      background: var(--pastel-card);
+      border-radius: 20px;
+      box-shadow: 0 15px 35px var(--pastel-shadow);
+      padding: 2.5rem;
+      max-width: 800px;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .upload-container {
+      position: relative;
+      border: 3px dashed var(--pastel-border);
+      border-radius: 15px;
+      padding: 2.5rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .upload-container:hover {
+      background: rgba(205, 180, 219, 0.1);
+      border-color: #9b8dbb;
+    }
+
+    .upload-icon {
+      font-size: 3.5rem;
+      color: #6c63ff;
+      margin-bottom: 1.2rem;
+    }
+
+    .upload-text {
+      color: #6c63ff;
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+    }
+
+    .upload-subtext {
+      color: var(--pastel-text);
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .file-info {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid var(--pastel-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .file-details h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.3rem;
+      color: #5a5a72;
+    }
+
+    .file-size {
+      color: #888;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .file-type {
+      background: var(--pastel-secondary);
+      color: var(--pastel-text);
+      font-weight: 600;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      display: inline-block;
+      font-size: 0.85rem;
+    }
+
+    .buttons-row {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 180px;
+    }
+
+    .btn i {
+      margin-right: 8px;
+      font-size: 1.2rem;
+    }
+
+    .btn-deflate {
+      background: var(--deflate-color);
+      color: white;
+    }
+
+    .btn-deflate:hover {
+      background: #5a52e0;
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(108, 99, 255, 0.3);
+    }
+
+    .btn-lz77 {
+      background: var(--lz77-color);
+      color: white;
+    }
+
+    .btn-lz77:hover {
+      background: #ff885c;
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(255, 154, 118, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--pastel-secondary);
+      color: var(--pastel-text);
+    }
+
+    .btn-secondary:hover {
+      background: #ffd0c1;
+      transform: translateY(-3px);
+    }
+
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #6d9a7f;
+      transform: translateY(-3px);
+      box-shadow: 0 7px 15px rgba(129, 178, 154, 0.3);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .status-container {
+      margin-top: 1.5rem;
+    }
+
+    .status {
+      padding: 1.2rem;
+      border-radius: 12px;
+      font-size: 1rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .status.error {
+      background: rgba(224, 122, 95, 0.15);
+      color: var(--error-color);
+      font-weight: 600;
+      border-left: 4px solid var(--error-color);
+    }
+
+    .status.success {
+      background: rgba(129, 178, 154, 0.15);
+      color: var(--success-color);
+      font-weight: 600;
+      border-left: 4px solid var(--success-color);
+    }
+
+    .stats {
+      background: var(--pastel-secondary);
+      border-radius: 15px;
+      padding: 1.5rem;
+      font-size: 1rem;
+      color: var(--pastel-text);
+      white-space: pre-wrap;
+      margin-top: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .stats-title {
+      font-weight: 700;
+      color: #6c63ff;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .stats-content {
+      line-height: 1.8;
+    }
+    
+    .time-stat {
+      color: var(--time-color);
+      font-weight: 600;
+    }
+
+    .algorithms {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .algorithm-card {
+      background: white;
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      flex: 1;
+      min-width: 200px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .algorithm-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      border-color: var(--pastel-primary);
+    }
+
+    .algorithm-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .deflate-icon {
+      color: var(--deflate-color);
+    }
+
+    .lz77-icon {
+      color: var(--lz77-color);
+    }
+
+    .algorithm-title {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #5a5a72;
+    }
+
+    .algorithm-desc {
+      font-size: 0.95rem;
+      color: #888;
+    }
+
+    .algorithms-info {
+      margin-top: 2rem;
+      border-top: 2px solid var(--pastel-primary);
+      padding-top: 1.5rem;
+    }
+
+    .algorithms-info-title {
+      text-align: center;
+      color: #6c63ff;
+      margin-bottom: 1.2rem;
+      font-size: 1.5rem;
+    }
+
+    .algorithm-explanation {
+      background: rgba(255, 255, 255, 0.8);
+      padding: 1.5rem;
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .algorithm-explanation h3 {
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .deflate-heading {
+      color: var(--deflate-color);
+    }
+
+    .lz77-heading {
+      color: var(--lz77-color);
+    }
+
+    .algorithm-explanation h3 i {
+      font-size: 1.4rem;
+    }
+
+    .download-section {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .d-none {
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.9rem;
+      padding: 1.5rem 0;
+      width: 100%;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      margin: 1rem 0;
+      overflow: hidden;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: linear-gradient(90deg, #6c63ff, #ff9a76);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    
+    .time-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .time-badge {
+      background: rgba(155, 93, 229, 0.1);
+      color: var(--time-color);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      .upload-container {
+        padding: 1.5rem;
+      }
+      
+      .buttons-row {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      .algorithms {
+        flex-direction: column;
+      }
+      
+      .download-section {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="header">
+    <h1 style="color:#111;">Data Compression & Decompression Portal</h1>
+    <p class="description">
+      Compress or decompress any file losslessly using DEFLATE (industry standard) or LZ77 algorithms.
+      Upload a file below, choose an action, then confirm before download.
+    </p>
+  </div>
+
+  <div class="container">
+    <div class="upload-container" id="dropContainer">
+      <div class="upload-icon">
+        <i class="fas fa-cloud-upload-alt"></i>
+      </div>
+      <h2 class="upload-text">Drag & Drop Files Here</h2>
+      <p class="upload-subtext">or click to browse your device</p>
+      <input type="file" id="fileInput" class="d-none">
+      <button class="btn btn-deflate" id="browseBtn">
+        <i class="fas fa-folder-open"></i> Browse Files
+      </button>
+      <p class="upload-subtext">Supports any file type (Max: 10MB)</p>
+    </div>
+
+    <div id="fileInfo" class="file-info d-none">
+      <div class="file-details">
+        <h3 id="fileName">File Name</h3>
+        <p id="fileSize" class="file-size">0 KB</p>
+        <span id="fileType" class="file-type">Type</span>
+      </div>
+      <button id="removeFile" class="btn btn-secondary">
+        <i class="fas fa-times"></i> Remove
+      </button>
+    </div>
+
+    <div class="algorithms">
+      <div class="algorithm-card">
+        <div class="algorithm-icon deflate-icon">
+          <i class="fas fa-file-archive"></i>
+        </div>
+        <h3 class="algorithm-title">DEFLATE Algorithm</h3>
+        <p class="algorithm-desc">Industry standard (used in ZIP, PNG)</p>
+      </div>
+      <div class="algorithm-card">
+        <div class="algorithm-icon lz77-icon">
+          <i class="fas fa-code-branch"></i>
+        </div>
+        <h3 class="algorithm-title">LZ77 Algorithm</h3>
+        <p class="algorithm-desc">Dictionary-based sliding window</p>
+      </div>
+    </div>
+
+    <div class="buttons-row">
+      <button id="compressDeflateBtn" class="btn btn-deflate" disabled>
+        <i class="fas fa-compress-alt"></i> Compress (DEFLATE)
+      </button>
+      <button id="compressLZ77Btn" class="btn btn-lz77" disabled>
+        <i class="fas fa-compress-arrows-alt"></i> Compress (LZ77)
+      </button>
+      <button id="decompressBtn" class="btn btn-secondary" disabled>
+        <i class="fas fa-expand-alt"></i> Decompress
+      </button>
+    </div>
+
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="time-container d-none" id="timeContainer">
+      <div class="time-badge">
+        <i class="fas fa-clock"></i>
+        <span id="timeValue">Processing time: 0ms</span>
+      </div>
+    </div>
+
+    <div class="status-container">
+      <div class="status" id="status"></div>
+      <div class="stats" id="stats" style="display:none;">
+        <div class="stats-title">Compression Statistics</div>
+        <div class="stats-content" id="statsContent"></div>
+      </div>
+      <div id="downloadSection" class="download-section d-none">
+        <button id="downloadBtn" class="btn btn-success">
+          <i class="fas fa-download"></i> Download Processed File
+        </button>
+        <button id="resetProcessedBtn" class="btn btn-secondary">
+          <i class="fas fa-redo"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <div class="algorithms-info">
+      <h2 class="algorithms-info-title">Compression Algorithms Explained</h2>
+      
+      <div class="algorithm-explanation">
+        <h3 class="deflate-heading"><i class="fas fa-file-archive"></i> DEFLATE Algorithm</h3>
+        <p>DEFLATE is the industry-standard compression algorithm used in ZIP files, PNG images, and GZIP. It combines two techniques:</p>
+        <ul>
+          <li><strong>LZ77 Compression</strong>: Replaces repeated sequences with references</li>
+          <li><strong>Huffman Coding</strong>: Encodes data using variable-length codes</li>
+        </ul>
+        <p>This implementation uses the browser's native Compression API for maximum reliability and performance.</p>
+      </div>
+      
+      <div class="algorithm-explanation">
+        <h3 class="lz77-heading"><i class="fas fa-code-branch"></i> LZ77 Algorithm</h3>
+        <p>LZ77 is a foundational algorithm that uses a sliding window technique:</p>
+        <ul>
+          <li>Scans data for repeated patterns</li>
+          <li>Replaces duplicates with (distance, length) pointers</li>
+          <li>Works well for text, binary files, and images</li>
+        </ul>
+        <p>This custom implementation provides a good balance between compression ratio and processing speed.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"></div>
+
+  <script src="../backend/backend.js"></script>
+</body>
+</html>
