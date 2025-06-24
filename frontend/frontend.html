@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -265,7 +266,7 @@
     .stats-content {
       line-height: 1.8;
     }
-    
+   
     .time-stat {
       color: var(--time-color);
       font-weight: 600;
@@ -397,14 +398,14 @@
       width: 0%;
       transition: width 0.3s ease;
     }
-    
+   
     .time-container {
       display: flex;
       justify-content: center;
       margin-top: 1rem;
       font-size: 1.1rem;
     }
-    
+   
     .time-badge {
       background: rgba(155, 93, 229, 0.1);
       color: var(--time-color);
@@ -420,24 +421,24 @@
       .container {
         padding: 1.5rem;
       }
-      
+     
       .upload-container {
         padding: 1.5rem;
       }
-      
+     
       .buttons-row {
         flex-direction: column;
         gap: 1rem;
       }
-      
+     
       .btn {
         width: 100%;
       }
-      
+     
       .algorithms {
         flex-direction: column;
       }
-      
+     
       .download-section {
         flex-direction: column;
         gap: 1rem;
@@ -446,6 +447,7 @@
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
   <div class="header">
     <h1 style="color:#111;">Data Compression & Decompression Portal</h1>
@@ -512,7 +514,7 @@
     <div class="progress-container" id="progressContainer">
       <div class="progress-bar" id="progressBar"></div>
     </div>
-    
+   
     <div class="time-container d-none" id="timeContainer">
       <div class="time-badge">
         <i class="fas fa-clock"></i>
@@ -538,7 +540,7 @@
 
     <div class="algorithms-info">
       <h2 class="algorithms-info-title">Compression Algorithms Explained</h2>
-      
+     
       <div class="algorithm-explanation">
         <h3 class="deflate-heading"><i class="fas fa-file-archive"></i> DEFLATE Algorithm</h3>
         <p>DEFLATE is the industry-standard compression algorithm used in ZIP files, PNG images, and GZIP. It combines two techniques:</p>
@@ -548,7 +550,7 @@
         </ul>
         <p>This implementation uses the browser's native Compression API for maximum reliability and performance.</p>
       </div>
-      
+     
       <div class="algorithm-explanation">
         <h3 class="lz77-heading"><i class="fas fa-code-branch"></i> LZ77 Algorithm</h3>
         <p>LZ77 is a foundational algorithm that uses a sliding window technique:</p>
@@ -564,6 +566,6 @@
 
   <div class="footer"></div>
 
-  <script src="../backend/backend.js"></script>
+  <script src="/backend/backend.js"></script>
 </body>
 </html>
