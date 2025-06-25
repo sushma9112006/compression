@@ -44,14 +44,14 @@ The core logic and functionality are handled by JavaScript.
 
   * **Vanilla JavaScript:** All interactivity, file handling, and algorithm implementations are written in pure JavaScript, avoiding external frameworks for a lightweight solution.
   * **Web APIs:**
-      * **File API:** Used for handling file uploads (via input and drag-and-drop), reading file contents as `ArrayBuffer`s, and creating `Blob`s for downloadable processed files.
-      * **Compression Streams API (`CompressionStream`, `DecompressionStream`):** This powerful, native browser API is utilized for the **DEFLATE** algorithm, providing high-performance and reliable compression/decompression that's consistent with req standards (like GZIP, ZIP).
-      * **`TextEncoder` & `TextDecoder`:** Essential for converting strings to `Uint8Array`s and vice-versa, particularly for handling filenames and magic bytes within the custom file format.
-      * **`performance.now()`:** Used for accurate benchmarking of compression and decompression operations to display processing times to the user.
+      * **File API:** Used for handling file uploads (via input and drag-and-drop), reading file contents as ArrayBuffers, and creating Blobs for downloadable processed files.
+      * **Compression Streams API (CompressionStream, DecompressionStream):** This powerful, native browser API is utilized for the **DEFLATE** algorithm, providing high-performance and reliable compression/decompression that's consistent with req standards (like GZIP, ZIP).
+      * **TextEncoder & TextDecoder:** Essential for converting strings to Uint8Arrays and vice-versa, particularly for handling filenames and magic bytes within the custom file format.
+      * **performance.now():** Used for accurate benchmarking of compression and decompression operations to display processing times to the user.
   * **Custom LZ77 Implementation:** I wrote the **LZ77 compression and decompression logic from scratch**. This involves:
       * **Sliding Window Algorithm:** Implementing the core LZ77 mechanism to find repeating byte sequences within a defined window and replace them with (distance, length) pairs.
-      * **Byte-level Manipulation:** Directly working with `Uint8Array`s for efficient binary data processing.
-  * **Custom File Format:** To manage compressed files, a simple custom format is used, prepending a "magic" identifier (`DFL8` for DEFLATE, `LZ77` for LZ77) and the original filename (along with its length) to the compressed data. This allows the decompressor to correctly identify the algorithm used and reconstruct the original file name.
+      * **Byte-level Manipulation:** Directly working with Uint8Arrays for efficient binary data processing.
+  * **Custom File Format:** To manage compressed files, a simple custom format is used, prepending a "magic" identifier (DFL8 for DEFLATE, LZ77 for LZ77) and the original filename (along with its length) to the compressed data. This allows the decompressor to correctly identify the algorithm used and reconstruct the original file name.
 
 ***How to Run It Locally**
 
@@ -67,13 +67,13 @@ If you have Python installed:
     git clone https://github.com/sushma9112006/compression.git
     ```
 2.  **Navigate to the project directory:**
-    The `frontend.html` and `backend.js` files, which form the web interface, are located within the `code` sub-folder of the `compression` repository. You need to navigate to this specific directory.
+    The *frontend.html* and *backend.js* files, which form the web interface, are located within the code sub-folder of the compression repository. You need to navigate to this specific directory.
 
     ```bash
     cd compression/code
     ```
 
-    * **Note for Windows users:** You might see `cd compression\code` in your command prompt, which is also correct.
+    * **Note for Windows users:** You might see *cd compression\code* in your command prompt, which is also correct.
 
 3.  **Start the HTTP server:**
     **Keep this command prompt/terminal window open** as long as you want the server to run 
@@ -81,8 +81,6 @@ If you have Python installed:
     ```bash
     python -m http.server
     ```
-
-    * If you have Python 3 installed, use `python3 -m http.server`.
     * You should see a message similar to: `Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...`
 
 4.  **Open in your web browser:**
