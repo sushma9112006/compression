@@ -120,3 +120,8 @@ Live demo of the Compression Portal :
 https://compression-portal.netlify.app/frontend.html
 
 ***IMPORTANT***::You'll see frontend.html there because that's the main page for my project, not the usual index.html.... So, if you just go to the base URL, it might not load the right way
+
+
+## DEMO VIDEO LINK
+
+https://drive.google.com/file/d/17U42g-hNTp3Sq2d5MpOeIrOrVIzffUo_/view?usp=drivesdk
